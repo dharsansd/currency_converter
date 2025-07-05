@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
 import axios from "axios";
 
 function App() {
@@ -11,91 +11,103 @@ function App() {
 
   useEffect(() => {
     const getExchangeRate = async () => {
-      try{
-       let url = `https://api.exchangerate-api.com/v4/latest/${fromCurrency} `; 
-       const response = await axios.get(url);
-       //console.log(response);
-       setExchangeRate(response.data.rates[toCurrency]);
-      }catch(error){
+      try {
+        const url = `https://api.exchangerate-api.com/v4/latest/${fromCurrency}`;
+        const response = await axios.get(url);
+        setExchangeRate(response.data.rates[toCurrency]);
+      } catch (error) {
         console.error("Error fetching exchange rate:", error);
       }
     };
-     getExchangeRate();
+    getExchangeRate();
   }, [fromCurrency, toCurrency]);
 
-    useEffect(() => {
+  useEffect(() => {
+    if (exchangeRate !== null) {
+      setConvertedAmount((amount * exchangeRate).toFixed(2));
+    }
+  }, [amount, exchangeRate]);
 
-      if (exchangeRate !== null) {
-         setConvertedAmount((amount * exchangeRate).toFixed(2));
-        }
-    },[amount, exchangeRate]);
-
-   const handleAmountChange = (e) => {
+  const handleAmountChange = (e) => {
     const value = parseFloat(e.target.value);
     setAmount(isNaN(value) ? 0 : value);
-   };
-     const handleFromCurrencyChange = (e) => {
-      setFromCurrency(e.target.value);
-     };
-     const handleToCurrencyChange = (e) => {
-      setToCurrency(e.target.value);
-     };
+  };
 
+  const handleFromCurrencyChange = (e) => {
+    setFromCurrency(e.target.value);
+  };
 
+  const handleToCurrencyChange = (e) => {
+    setToCurrency(e.target.value);
+  };
 
   return (
     <>
-            <title>Currency-converter</title>
-           <h2>Exercise-3</h2>
-         <div className="Currency-Converter">
+      <h2>Exercise-3</h2>
+      <div className="Currency-Converter">
         <div className="box"></div>
         <div className="data">
           <h1>Currency-Converter</h1>
+
           <div className="input-converter">
             <label htmlFor="amt">Amount:</label>
-            <input type="number" id="amt" value={amount} onChange={handleAmountChange} />
-         </div>
+            <input
+              type="number"
+              id="amt"
+              value={amount}
+              onChange={handleAmountChange}
+            />
+          </div>
+
           <div className="input-converter">
-                <label htmlFor="fromCurrency">From Currency:</label>
-                <select id="fromCurrency" value={fromCurrency} onChange={handleFromCurrencyChange} >
-                   <option value="USD">USD - United States Dollar</option>
-                  <option value="EUR">EUR - Euro</option>
-                  <option value="GBP">GBP - British Pound Sterling</option>
-                  <option value="JPY">JPY - Japanese yen</option>
-                  <option value="AUD">AUD - Australian Dollar</option>
-                  <option value="CAD">CAD - Canadian Dollar</option>
-                  <option value="CNY">CNY - Chinese Yuan</option>
-                  <option value="INR">INR - Indian Rupee</option>
-                  <option value="BRL">BRL - Brazilian Real</option>
-                  <option value="ZAR">ZAR - South African Rand</option>
+            <label htmlFor="fromCurrency">From Currency:</label>
+            <select
+              id="fromCurrency"
+              value={fromCurrency}
+              onChange={handleFromCurrencyChange}
+            >
+              <option value="USD">USD - United States Dollar</option>
+              <option value="EUR">EUR - Euro</option>
+              <option value="GBP">GBP - British Pound Sterling</option>
+              <option value="JPY">JPY - Japanese Yen</option>
+              <option value="AUD">AUD - Australian Dollar</option>
+              <option value="CAD">CAD - Canadian Dollar</option>
+              <option value="CNY">CNY - Chinese Yuan</option>
+              <option value="INR">INR - Indian Rupee</option>
+              <option value="BRL">BRL - Brazilian Real</option>
+              <option value="ZAR">ZAR - South African Rand</option>
+            </select>
+          </div>
 
-                </select>
-                </div>
-                 <div className="input-converter">
-                <label htmlFor="toCurrency">To Currency:</label>
-                <select id="toCurrency" value={toCurrency} onChange={handleToCurrencyChange}>
-                   <option value="USD">USD - United States Dollar</option>
-                  <option value="EUR">EUR - Euro</option>
-                  <option value="GBP">GBP - British Pound Sterling</option>
-                  <option value="JPY">JPY - Japanese yen</option>
-                  <option value="AUD">AUD - Australian Dollar</option>
-                  <option value="CAD">CAD - Canadian Dollar</option>
-                  <option value="CNY">CNY - Chinese Yuan</option>
-                  <option value="INR">INR - Indian Rupee</option>
-                  <option value="BRL">BRL - Brazilian Real</option>
-                  <option value="ZAR">ZAR - South African Rand</option>
-                  </select>
+          <div className="input-converter">
+            <label htmlFor="toCurrency">To Currency:</label>
+            <select
+              id="toCurrency"
+              value={toCurrency}
+              onChange={handleToCurrencyChange}
+            >
+              <option value="USD">USD - United States Dollar</option>
+              <option value="EUR">EUR - Euro</option>
+              <option value="GBP">GBP - British Pound Sterling</option>
+              <option value="JPY">JPY - Japanese Yen</option>
+              <option value="AUD">AUD - Australian Dollar</option>
+              <option value="CAD">CAD - Canadian Dollar</option>
+              <option value="CNY">CNY - Chinese Yuan</option>
+              <option value="INR">INR - Indian Rupee</option>
+              <option value="BRL">BRL - Brazilian Real</option>
+              <option value="ZAR">ZAR - South African Rand</option>
+            </select>
+          </div>
 
-
-                </div>
-                  <div className="result">
-                <p> {amount} {fromCurrency} = {toCurrency} </p>
-               </div>
-                </div>
-                </div>
-    
+          <div className="result">
+            <p>
+              {amount} {fromCurrency} = {convertedAmount ?? '...'} {toCurrency}
+            </p>
+          </div>
+        </div>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
