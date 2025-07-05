@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     const getExchangeRate = async () => {
       try {
-        const url = `https://api.exchangerate-api.com/v4/latest/${fromCurrency}`;
+        const url = `https://api.exchangerate-api.com/v4/latest/${fromCurrency}`; 
         const response = await axios.get(url);
         setExchangeRate(response.data.rates[toCurrency]);
       } catch (error) {
